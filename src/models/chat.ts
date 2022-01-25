@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
-import { ChatInterface, MessageInterface } from "../interfaces/user";
+import {
+    ChatInterface,
+    MessageInterface,
+    MemberInterface,
+} from "../interfaces/user";
 const Schema = mongoose.Schema;
 
 export const STT_CHAT = {
@@ -8,6 +12,15 @@ export const STT_CHAT = {
 export const STT_MESSAGE = {
     DEFAULT: 0,
 };
+
+const Member = new Schema<MemberInterface>(
+    {
+        idUser: String,
+        idChat: String,
+    },
+    { timestamps: { createdAt: "created_at" } }
+);
+
 const Message = new Schema<MessageInterface>(
     {
         content: String,
@@ -16,15 +29,16 @@ const Message = new Schema<MessageInterface>(
     },
     { timestamps: { createdAt: "created_at" } }
 );
-const Chat = new Schema<ChatInterface>(
+export const Chat = new Schema<ChatInterface>(
     {
-        member: [String],
+        name: String,
+        member: [Member],
         message: [Message],
         status: Number,
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-const ChatModel = mongoose.model("Chat", Chat);
+// const ChatModel = mongoose.model("Chat", Chat);
 
-export default ChatModel;
+// export default ChatModel;

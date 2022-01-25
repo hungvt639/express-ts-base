@@ -1,23 +1,21 @@
 import mongoose from "mongoose";
-import {
-    ChatZoomInterface,
-    FriendInterface,
-    UserInterface,
-} from "../interfaces/user";
+import { FriendInterface, UserInterface } from "../interfaces/user";
+import { Chat } from "./chat";
+
 const Schema = mongoose.Schema;
 
 export const CHAT_ZOOM_STT = {
     default: 0,
 };
 
-const ChatZoom = new Schema<ChatZoomInterface>(
-    {
-        name: String,
-        status: Number,
-        idChat: String,
-    },
-    { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-);
+// const ChatZoom = new Schema<ChatZoomInterface>(
+//     {
+//         name: String,
+//         status: Number,
+//         idChat: String,
+//     },
+//     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
+// );
 
 const Friend = new Schema<FriendInterface>(
     {
@@ -43,7 +41,7 @@ const User = new Schema<UserInterface>(
         birthday: Date,
         avatar: { type: String, default: "/public/img/avatar.jpg" },
         friends: [Friend],
-        chatZoom: [ChatZoom],
+        chats: [Chat],
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );

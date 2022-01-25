@@ -13,6 +13,7 @@ import connect from "./config/db";
 import bodyParser from "body-parser";
 import { PORT } from "./config/const";
 import cors from "cors";
+import { errorHandler } from "./utils/errorHandler ";
 // import MqttClient from "./config/mqtt";
 
 connect();
@@ -28,7 +29,7 @@ app.use("/blog", Blog);
 app.use("/file", File);
 app.use("/product", Product);
 app.use("/notify", Notify);
-
+app.use(errorHandler);
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`);
 });

@@ -19,13 +19,20 @@ export interface UserInterface {
     birthday?: Date;
     friends?: FriendInterface[];
     avatar?: SchemaDefinitionProperty<String>;
-    chatZoom?: ChatZoomInterface[];
+    chats?: ChatInterface[];
 }
 // export type UserInterface = typeof UserModel<UserInterfaces>
 export interface DataLoginInterface {
     username: String;
     password: String;
 }
+
+export interface MemberInterface {
+    _id: String;
+    idUser: String;
+    idChat: String;
+}
+
 export interface MessageInterface {
     _id?: String;
     content: String;
@@ -34,14 +41,15 @@ export interface MessageInterface {
 }
 export interface ChatInterface {
     _id: String;
-    member: String[];
+    name: String;
+    member?: MemberInterface[];
     message?: MessageInterface[];
     status: number;
 }
 
-export interface ChatZoomInterface {
-    _id: String;
-    name: String;
-    status: Number;
-    idChat: String;
-}
+// export interface ChatZoomInterface {
+//     _id: String;
+//     name: String;
+//     status: Number;
+//     idChat: String;
+// }

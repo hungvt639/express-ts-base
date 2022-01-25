@@ -16,7 +16,8 @@ export async function getListUser(req: Req, res: Res, next) {
 export async function getUser(req: Req, res: Res, next) {
     try {
         const id = req.params.id;
-        const user = await UserModel.findById(id);
+        const option: string = req.body.option;
+        const user = await UserModel.findById(id, option);
         res.json(user).status(200);
     } catch (err) {
         next(err);
