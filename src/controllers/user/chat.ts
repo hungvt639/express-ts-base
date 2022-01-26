@@ -139,7 +139,12 @@ export async function getMessageChat(req: Req, res: Res, next) {
             return;
         }
         const _id = req.user?._id;
-        const user = await UserModel.findById(_id, "chats");
+        const user = await UserModel.findById(_id).select({
+            "chats._id": 1,
+            "chats.name": 1,
+            "chats.member": 1,
+            "chats.status": 1,
+        });
         const chats = user.chats?.filter((c) => c._id == id);
         if (chats.length) {
             res.json(chats[0]).status(200);

@@ -17,7 +17,7 @@ import {
 } from "../controllers/user/chat";
 import { Router } from "express";
 import authentication from "../middlewares/authentication";
-import { sendMessage } from "../controllers/user/message";
+import { sendMessage, getMessage } from "../controllers/user/message";
 import upload from "../config/upload";
 const User = Router();
 
@@ -36,7 +36,8 @@ User.post("/unfriend", authentication, unfriend);
 User.get("/chats", authentication, getListChat);
 User.post("/chat", authentication, createChatRoom);
 User.get("/chat/:id", authentication, getChatUser);
-User.get("/message/:id", authentication, getMessageChat);
+User.get("/message-chat/:id", authentication, getMessageChat);
+User.get("/message/:id", authentication, getMessage);
 User.post("/message/:id", authentication, sendMessage);
 User.post("/avatar", authentication, upload.single("avatar"), editAvatar);
 export default User;

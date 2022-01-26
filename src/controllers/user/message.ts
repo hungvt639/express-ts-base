@@ -1,14 +1,9 @@
 import { Req, Res } from "../../interfaces/Express";
-import { DataLoginInterface, UserInterface } from "../../interfaces/user";
-import bcrypt from "bcrypt";
 import UserModel from "../../models/user";
-import jwt from "jsonwebtoken";
-import { SECRET, TOPIC_MESSAGE } from "../../config/const";
+import { TOPIC_MESSAGE } from "../../config/const";
 import mqttClient from "../../config/mqtt";
-import { createNotifcation } from "../../utils/createNotify";
-import { CreateNotification } from "../../interfaces/Notification";
-import { NOTIFY_STT } from "../../models/notification";
-import { STT_CHAT, STT_MESSAGE } from "../../models/chat";
+
+import { STT_MESSAGE } from "../../models/chat";
 
 export async function sendMessage(req: Req, res: Res, next) {
     try {
@@ -61,6 +56,29 @@ export async function sendMessage(req: Req, res: Res, next) {
         }
 
         res.json(message).status(200);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export async function getMessage(req: Req, res: Res, next) {
+    try {
+        const id: String = req.params.id as String; //id chat
+        if (!id) {
+            res.json({ message: "Lỗi request" }).status(404);
+            return;
+        }
+        const _id = req.user?._id;
+        const user = await UserModel.findById(_id).select({
+            "chats._id": 1,
+            "chats.message": 1,
+        });
+        const chats = user.chats?.filter((c) => c._id == id);
+        if (chats.length) {
+            res.json(chats[0].message).status(200);
+        } else {
+            res.status(400).json({ message: "Không tồn tại" });
+        }
     } catch (err) {
         next(err);
     }
