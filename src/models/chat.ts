@@ -38,7 +38,3 @@ export const Chat = new Schema<ChatInterface>(
     },
     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
-
-// const ChatModel = mongoose.model("Chat", Chat);
-
-// export default ChatModel;

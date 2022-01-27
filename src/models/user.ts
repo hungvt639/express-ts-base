@@ -8,15 +8,6 @@ export const CHAT_ZOOM_STT = {
     default: 0,
 };
 
-// const ChatZoom = new Schema<ChatZoomInterface>(
-//     {
-//         name: String,
-//         status: Number,
-//         idChat: String,
-//     },
-//     { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
-// );
-
 const Friend = new Schema<FriendInterface>(
     {
         idFriend: String,

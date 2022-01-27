@@ -13,7 +13,7 @@ export async function sendMessage(req: Req, res: Res, next) {
         if (!content) {
             res.status(400).json({ message: "Không được gửi tin nhắn trống" });
         }
-        const user = await UserModel.findById(_id, "chats");
+        const user = await UserModel.findById(_id, "chats fullname");
 
         let chatIndex = user.chats.findIndex((c) => c._id == id);
         if (chatIndex < 0) {
@@ -26,11 +26,26 @@ export async function sendMessage(req: Req, res: Res, next) {
             status: STT_MESSAGE.DEFAULT,
         };
         user.chats[chatIndex].message.push(msg);
-        user.save();
-        const message =
-            user.chats[chatIndex].message[
+        let message = {
+            to: user.chats[chatIndex].name,
+            m: user.chats[chatIndex].message[
                 user.chats[chatIndex].message.length - 1
-            ];
+            ],
+            chat: id,
+            from: user.fullname,
+        };
+        mqttClient.publish(
+            `${TOPIC_MESSAGE}/${_id}`,
+            JSON.stringify(message),
+            { qos: 0, retain: false },
+            (error) => {
+                if (error) {
+                    console.error(error);
+                }
+            }
+        );
+        user.save();
+
         for (let member of user.chats[chatIndex].member) {
             const userMember = await UserModel.findById(member.idUser, "chats");
 
@@ -40,10 +55,10 @@ export async function sendMessage(req: Req, res: Res, next) {
             if (chatIndex >= 0) {
                 userMember.chats[chatIndex].message.push(msg);
                 userMember.save();
-                console.log("id_", member.idChat);
-
+                message.to = userMember.chats[chatIndex].name;
+                message.chat = member.idChat;
                 mqttClient.publish(
-                    `${TOPIC_MESSAGE}/${member.idChat}`,
+                    `${TOPIC_MESSAGE}/${member.idUser}`,
                     JSON.stringify(message),
                     { qos: 0, retain: false },
                     (error) => {
