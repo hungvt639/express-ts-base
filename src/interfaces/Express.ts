@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { UserInterface } from "./user";
 
 export interface Req extends Request {
@@ -6,3 +6,5 @@ export interface Req extends Request {
     file?: any;
 }
 export interface Res extends Response {}
+
+export interface Next extends NextFunction {}
